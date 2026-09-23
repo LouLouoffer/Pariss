@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pariss — A Maison of Pre-loved Treasures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Parisienne&family=Mea+Culpa&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #f5ecdc;
+  --paper: #fbf4e6;
+  --paper-soft: #f9f1de;
+  --ink: #3a2418;
+  --ink-soft: #6b4e3a;
+  --rose: #b87082;
+  --rose-deep: #8b3e54;
+  --gold: #b08a4f;
+  --line: #d4c2a3;
+  --shadow: rgba(58, 36, 24, 0.08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Subtle paper texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.2 0 0 0 0 0.14 0 0 0 0 0.09 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ───── DOODLES (reusable SVG decorations) ───── */
+.doodle {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lace-divider {
+  display: block;
+  width: 100%;
+  height: 24px;
+  color: var(--rose);
+  opacity: 0.8;
+}
+
+/* ───── NAV ───── */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 24px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(245, 236, 220, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav-logo {
+  font-family: 'Parisienne', cursive;
+  font-size: 32px;
+  color: var(--rose-deep);
+  letter-spacing: 0.02em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 16px;
+}
+
+.nav-links a {
+  color: var(--ink);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--rose-deep);
+  transition: width 0.3s, left 0.3s;
+}
+
+.nav-links a:hover { color: var(--rose-deep); }
+.nav-links a:hover::after { width: 100%; left: 0; }
+
+/* ───── HERO ───── */
+.hero {
+  min-height: 100vh;
+  padding: 140px 48px 80px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-stamp {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  padding: 6px 24px;
+  border: 1px solid var(--rose-deep);
+  border-radius: 100px;
+  margin-bottom: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  animation: fadeUp 1s ease-out;
+}
+
+.hero-stamp::before, .hero-stamp::after {
+  content: '✦';
+  font-size: 10px;
+}
+
+.hero-title {
+  font-family: 'Parisienne', cursive;
+  font-size: clamp(120px, 18vw, 260px);
+  line-height: 0.9;
+  color: var(--rose-deep);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  position: relative;
+  animation: fadeUp 1.2s ease-out 0.1s both;
+}
+
+.hero-subtitle {
+  font-family: 'Italiana', serif;
+  font-size: clamp(20px, 2vw, 28px);
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 32px;
+  animation: fadeUp 1.2s ease-out 0.25s both;
+}
+
+.hero-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--ink-soft);
+  max-width: 580px;
+  line-height: 1.5;
+  margin-bottom: 56px;
+  animation: fadeUp 1.2s ease-out 0.4s both;
+}
+
+.hero-tagline em {
+  color: var(--rose-deep);
+  font-weight: 500;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 64px;
+  font-family: 'Cormorant Garamond', serif;
+  animation: fadeUp 1.2s ease-out 0.55s both;
+}
+
+.hero-meta-item {
+  text-align: center;
+}
+
+.hero-meta-num {
+  font-family: 'Italiana', serif;
+  font-size: 48px;
+  color: var(--rose-deep);
+  line-height: 1;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.hero-meta-label {
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Hero decorations */
+.hero-doodle-1 { top: 18%; left: 8%; width: 80px; transform: rotate(-12deg); animation: float 6s ease-in-out infinite; }
+.hero-doodle-2 { top: 22%; right: 10%; width: 100px; transform: rotate(15deg); animation: float 7s ease-in-out infinite 1s; }
+.hero-doodle-3 { bottom: 18%; left: 12%; width: 90px; animation: float 8s ease-in-out infinite 0.5s; }
+.hero-doodle-4 { bottom: 22%; right: 8%; width: 70px; transform: rotate(-8deg); animation: float 6.5s ease-in-out infinite 1.5s; }
+.hero-doodle-5 { top: 45%; left: 4%; width: 60px; animation: float 9s ease-in-out infinite; }
+.hero-doodle-6 { top: 50%; right: 4%; width: 60px; transform: rotate(20deg); animation: float 7.5s ease-in-out infinite 2s; }
+
+/* Hero corner laces */
+.lace-corner {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  color: var(--rose);
+  opacity: 0.5;
+}
+
+.lace-corner-tl { top: 100px; left: 24px; }
+.lace-corner-tr { top: 100px; right: 24px; transform: scaleX(-1); }
+.lace-corner-bl { bottom: 24px; left: 24px; transform: scaleY(-1); }
+.lace-corner-br { bottom: 24px; right: 24px; transform: scale(-1, -1); }
+
+/* ───── DIVIDER ───── */
+.divider-section {
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.divider-section .lace-line {
+  flex: 1;
+  height: 20px;
+  color: var(--rose);
+  opacity: 0.7;
+}
+
+.divider-section .divider-icon {
+  font-family: 'Italiana', serif;
+  font-size: 14px;
+  letter-spacing: 0.4em;
+  color: var(--rose-deep);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ───── COLLECTION ───── */
+.collection {
+  padding: 80px 48px 120px;
+  position: relative;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 80px;
+  position: relative;
+}
+
+.section-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  margin-bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-eyebrow::before, .section-eyebrow::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--rose);
+}
+
+.section-title {
+  font-family: 'Parisienne', cursive;
+  font-size: clamp(64px, 8vw, 120px);
+  color: var(--rose-deep);
+  line-height: 1;
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+
+.section-subtitle {
+  font-family: 'Italiana', serif;
+  font-size: 16px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.section-decor {
+  width: 200px;
+  height: 30px;
+  color: var(--rose);
+  margin: 24px auto 0;
+  display: block;
+  opacity: 0.7;
+}
+
+/* Product grid - 21 items */
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 64px 48px;
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.product {
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product:hover { transform: translateY(-10px); }
+
+.product-frame {
+  position: relative;
+  padding: 14px;
+  background: var(--paper);
+  box-shadow: 0 12px 40px var(--shadow);
+  border: 1px solid var(--line);
+  margin-bottom: 20px;
+}
+
+/* Ornate corners on product frame */
+.product-frame::before, .product-frame::after {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--rose-deep);
+  opacity: 0.6;
+}
+
+.product-frame::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.product-frame::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+.product-image {
+  width: 100%;
+  aspect-ratio: 4/5;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(58, 36, 24, 0.25));
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.product:hover .product-image::after { opacity: 1; }
+
+.product-image-label {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  z-index: 2;
+}
+
+.product-tag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--paper);
+  padding: 5px 12px;
+  font-family: 'Italiana', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  border: 1px solid var(--rose-deep);
+  z-index: 3;
+}
+
+.product-info {
+  text-align: center;
+  padding: 0 8px;
+}
+
+.product-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  margin-bottom: 6px;
+}
+
+.product-name {
+  font-family: 'Italiana', serif;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.product-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.product-divider {
+  display: block;
+  margin: 12px auto;
+  width: 60px;
+  height: 10px;
+  color: var(--rose);
+  opacity: 0.6;
+}
+
+.product-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--rose-deep);
+  letter-spacing: 0.08em;
+}
+
+/* Sample gradient backgrounds (replace with real product images) */
+.bg-1 { background: linear-gradient(135deg, #c9b894 0%, #8b6f4e 100%); }
+.bg-2 { background: linear-gradient(135deg, #2b1f1a 0%, #4a3528 100%); }
+.bg-3 { background: linear-gradient(135deg, #e8d4c0 0%, #b89a7a 100%); }
+.bg-4 { background: linear-gradient(135deg, #8b3e54 0%, #4a1d2a 100%); }
+.bg-5 { background: linear-gradient(135deg, #e5d9c0 0%, #b8a585 100%); }
+.bg-6 { background: linear-gradient(135deg, #1a1612 0%, #3a2c20 100%); }
+.bg-7 { background: linear-gradient(135deg, #b08868 0%, #7a5b40 100%); }
+.bg-8 { background: linear-gradient(135deg, #f0d5c8 0%, #c89888 100%); }
+.bg-9 { background: linear-gradient(135deg, #2d2018 0%, #1a1210 100%); }
+.bg-10 { background: linear-gradient(135deg, #d4c5a9 0%, #8b7355 100%); }
+.bg-11 { background: linear-gradient(135deg, #6b3a3a 0%, #3a1d1d 100%); }
+.bg-12 { background: linear-gradient(135deg, #b89a7a 0%, #8a6e50 100%); }
+.bg-13 { background: linear-gradient(135deg, #a85a6a 0%, #5a2838 100%); }
+.bg-14 { background: linear-gradient(135deg, #5a4030 0%, #2a1d15 100%); }
+.bg-15 { background: linear-gradient(135deg, #e8c8a8 0%, #a88858 100%); }
+.bg-16 { background: linear-gradient(135deg, #c89888 0%, #8a5a4a 100%); }
+.bg-17 { background: linear-gradient(135deg, #2a3020 0%, #4a5238 100%); }
+.bg-18 { background: linear-gradient(135deg, #d8a888 0%, #a87858 100%); }
+.bg-19 { background: linear-gradient(135deg, #1a1a2a 0%, #2a2a3a 100%); }
+.bg-20 { background: linear-gradient(135deg, #c0a888 0%, #8a7858 100%); }
+.bg-21 { background: linear-gradient(135deg, #e8b8a8 0%, #b88878 100%); }
+
+/* Scattered doodles in collection */
+.collection-doodle-1 { top: 6%; right: 4%; width: 90px; transform: rotate(15deg); }
+.collection-doodle-2 { top: 30%; left: 2%; width: 75px; transform: rotate(-10deg); }
+.collection-doodle-3 { top: 60%; right: 2%; width: 85px; transform: rotate(8deg); }
+.collection-doodle-4 { bottom: 10%; left: 4%; width: 80px; transform: rotate(-15deg); }
+
+/* ───── POPUP SECTION ───── */
+.popup {
+  padding: 140px 48px;
+  background: var(--rose-deep);
+  color: var(--paper);
+  position: relative;
+  overflow: hidden;
+}
+
+.popup::before {
+  content: '';
+  position: absolute;
+  inset: 32px;
+  border: 1px solid rgba(251, 244, 230, 0.25);
+  pointer-events: none;
+}
+
+.popup::after {
+  content: '';
+  position: absolute;
+  inset: 40px;
+  border: 1px solid rgba(251, 244, 230, 0.15);
+  pointer-events: none;
+}
+
+.popup-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.popup-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.popup-eyebrow::before, .popup-eyebrow::after {
+  content: '';
+  width: 50px;
+  height: 1px;
+  background: rgba(251, 244, 230, 0.6);
+}
+
+.popup-title {
+  font-family: 'Parisienne', cursive;
+  font-size: clamp(80px, 10vw, 160px);
+  line-height: 1;
+  margin-bottom: 32px;
+  font-weight: 400;
+}
+
+.popup-location {
+  font-family: 'Italiana', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.popup-city {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 24px;
+  margin-bottom: 48px;
+  opacity: 0.85;
+}
+
+.popup-details {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  margin-top: 48px;
+  padding-top: 48px;
+  border-top: 1px solid rgba(251, 244, 230, 0.2);
+}
+
+.popup-detail {
+  text-align: center;
+}
+
+.popup-detail-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+
+.popup-detail-value {
+  font-family: 'Italiana', serif;
+  font-size: 22px;
+  letter-spacing: 0.05em;
+}
+
+.popup-detail-value span {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 0.75;
+  margin-top: 6px;
+}
+
+.popup-cta {
+  display: inline-block;
+  margin-top: 56px;
+  padding: 16px 48px;
+  font-family: 'Italiana', serif;
+  font-size: 14px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  background: var(--paper);
+  text-decoration: none;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+}
+
+.popup-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+
+.popup-doodle-1 { top: 8%; left: 6%; width: 100px; color: rgba(251, 244, 230, 0.5); transform: rotate(-12deg); }
+.popup-doodle-2 { top: 12%; right: 7%; width: 90px; color: rgba(251, 244, 230, 0.5); transform: rotate(15deg); }
+.popup-doodle-3 { bottom: 10%; left: 8%; width: 110px; color: rgba(251, 244, 230, 0.5); transform: rotate(8deg); }
+.popup-doodle-4 { bottom: 12%; right: 5%; width: 95px; color: rgba(251, 244, 230, 0.5); transform: rotate(-10deg); }
+
+/* ───── FOOTER ───── */
+footer {
+  padding: 80px 48px 40px;
+  background: var(--paper);
+  position: relative;
+  border-top: 1px solid var(--line);
+}
+
+.footer-top {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.footer-brand {
+  font-family: 'Parisienne', cursive;
+  font-size: 96px;
+  color: var(--rose-deep);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.footer-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--ink-soft);
+}
+
+.footer-divider {
+  display: block;
+  margin: 32px auto;
+  width: 240px;
+  height: 24px;
+  color: var(--rose);
+  opacity: 0.6;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  max-width: 900px;
+  margin: 0 auto 64px;
+  text-align: center;
+}
+
+.footer-col h4 {
+  font-family: 'Italiana', serif;
+  font-size: 14px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+
+.footer-col p,
+.footer-col a {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--ink);
+  text-decoration: none;
+  margin-bottom: 6px;
+  transition: color 0.3s;
+}
+
+.footer-col a:hover { color: var(--rose-deep); }
+
+.footer-bottom {
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-soft);
+  letter-spacing: 0.15em;
+}
+
+/* ───── ANIMATIONS ───── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+  50% { transform: translateY(-12px) rotate(var(--rot, 0deg)); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ───── RESPONSIVE ───── */
+@media (max-width: 900px) {
+  nav { padding: 16px 20px; }
+  .nav-logo { font-size: 24px; }
+  .nav-links { gap: 18px; font-size: 14px; }
+  .hero { padding: 120px 20px 60px; }
+  .hero-meta { gap: 32px; flex-wrap: wrap; justify-content: center; }
+  .lace-corner { width: 90px; height: 90px; }
+  .lace-corner-tl, .lace-corner-tr { top: 80px; }
+  .collection, .popup, footer { padding-left: 20px; padding-right: 20px; }
+  .products { grid-template-columns: 1fr; gap: 48px; }
+  .popup-details { flex-direction: column; gap: 32px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-brand { font-size: 64px; }
+  .collection-doodle-1, .collection-doodle-2, .collection-doodle-3, .collection-doodle-4 { display: none; }
+  .hero-doodle-1, .hero-doodle-2, .hero-doodle-3, .hero-doodle-4, .hero-doodle-5, .hero-doodle-6 { transform: scale(0.6); }
+}
+
+@media (min-width: 901px) and (max-width: 1200px) {
+  .products { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ───── REUSABLE SVG DEFINITIONS ───── -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Lace scallop pattern -->
+    <symbol id="lace-line" viewBox="0 0 400 20">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M0,10 Q10,2 20,10 T40,10 T60,10 T80,10 T100,10 T120,10 T140,10 T160,10 T180,10 T200,10 T220,10 T240,10 T260,10 T280,10 T300,10 T320,10 T340,10 T360,10 T380,10 T400,10"/>
+        <g fill="currentColor">
+          <circle cx="10" cy="2" r="1.2"/>
+          <circle cx="30" cy="2" r="1.2"/>
+          <circle cx="50" cy="2" r="1.2"/>
+          <circle cx="70" cy="2" r="1.2"/>
+          <circle cx="90" cy="2" r="1.2"/>
+          <circle cx="110" cy="2" r="1.2"/>
+          <circle cx="130" cy="2" r="1.2"/>
+          <circle cx="150" cy="2" r="1.2"/>
+          <circle cx="170" cy="2" r="1.2"/>
+          <circle cx="190" cy="2" r="1.2"/>
+          <circle cx="210" cy="2" r="1.2"/>
+          <circle cx="230" cy="2" r="1.2"/>
+          <circle cx="250" cy="2" r="1.2"/>
+          <circle cx="270" cy="2" r="1.2"/>
+          <circle cx="290" cy="2" r="1.2"/>
+          <circle cx="310" cy="2" r="1.2"/>
+          <circle cx="330" cy="2" r="1.2"/>
+          <circle cx="350" cy="2" r="1.2"/>
+          <circle cx="370" cy="2" r="1.2"/>
+          <circle cx="390" cy="2" r="1.2"/>
+        </g>
+      </g>
+    </symbol>
+
+    <!-- Lace corner ornament -->
+    <symbol id="lace-corner" viewBox="0 0 180 180">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <!-- Outer arc with scallops -->
+        <path d="M0,0 L0,140 Q10,135 14,128 Q18,135 28,135 Q32,128 36,128 Q40,135 50,135 Q54,128 58,128 Q62,135 72,135 Q76,128 80,128 Q84,135 94,135 Q98,128 102,128 Q106,135 116,135 Q120,128 124,128 Q128,135 138,135 Q140,135 140,0 Z" fill="none"/>
+        <!-- Inner decorative arcs -->
+        <path d="M20,0 L20,120 Q22,118 24,115" />
+        <path d="M40,0 L40,110" />
+        <path d="M60,0 L60,100" />
+        <path d="M80,0 L80,90" />
+        <!-- Decorative flowers -->
+        <g>
+          <circle cx="30" cy="30" r="3"/>
+          <circle cx="60" cy="60" r="3"/>
+          <circle cx="90" cy="90" r="3"/>
+          <circle cx="120" cy="120" r="3"/>
+        </g>
+        <!-- Little flowers -->
+        <g transform="translate(50, 100)">
+          <circle r="2"/>
+          <circle cx="-6" cy="0" r="2"/>
+          <circle cx="6" cy="0" r="2"/>
+          <circle cx="0" cy="-6" r="2"/>
+          <circle cx="0" cy="6" r="2"/>
+        </g>
+        <g transform="translate(100, 50)">
+          <circle r="2"/>
+          <circle cx="-6" cy="0" r="2"/>
+          <circle cx="6" cy="0" r="2"/>
+          <circle cx="0" cy="-6" r="2"/>
+          <circle cx="0" cy="6" r="2"/>
+        </g>
+      </g>
+    </symbol>
+
+    <!-- Bow ribbon doodle -->
+    <symbol id="doodle-bow" viewBox="0 0 100 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M50,30 Q20,10 15,25 Q10,40 25,42 Q40,40 50,30 Q60,40 75,42 Q90,40 85,25 Q80,10 50,30 Z"/>
+        <circle cx="50" cy="30" r="4" fill="currentColor"/>
+        <path d="M48,33 L42,55"/>
+        <path d="M52,33 L58,55"/>
+        <path d="M42,55 L37,52 M42,55 L45,52"/>
+        <path d="M58,55 L53,52 M58,55 L61,52"/>
+      </g>
+    </symbol>
+
+    <!-- Daisy flower doodle -->
+    <symbol id="doodle-flower" viewBox="0 0 80 80">
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="40" cy="20" rx="6" ry="12"/>
+        <ellipse cx="40" cy="60" rx="6" ry="12"/>
+        <ellipse cx="20" cy="40" rx="12" ry="6"/>
+        <ellipse cx="60" cy="40" rx="12" ry="6"/>
+        <ellipse cx="25" cy="25" rx="8" ry="10" transform="rotate(-45 25 25)"/>
+        <ellipse cx="55" cy="25" rx="8" ry="10" transform="rotate(45 55 25)"/>
+        <ellipse cx="25" cy="55" rx="8" ry="10" transform="rotate(45 25 55)"/>
+        <ellipse cx="55" cy="55" rx="8" ry="10" transform="rotate(-45 55 55)"/>
+        <circle cx="40" cy="40" r="6" fill="currentColor"/>
+      </g>
+    </symbol>
+
+    <!-- Heart doodle -->
+    <symbol id="doodle-heart" viewBox="0 0 60 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M30,50 C30,50 8,38 8,22 C8,13 15,8 22,12 C26,14 28,18 30,22 C32,18 34,14 38,12 C45,8 52,13 52,22 C52,38 30,50 30,50 Z"/>
+        <path d="M22,22 Q24,24 28,22" />
+      </g>
+    </symbol>
+
+    <!-- Sparkle/star doodle -->
+    <symbol id="doodle-sparkle" viewBox="0 0 50 50">
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M25,5 L25,20 M25,30 L25,45 M5,25 L20,25 M30,25 L45,25"/>
+        <path d="M10,10 L18,18 M32,32 L40,40 M40,10 L32,18 M18,32 L10,40"/>
+        <circle cx="25" cy="25" r="3" fill="currentColor"/>
+      </g>
+    </symbol>
+
+    <!-- Ribbon doodle -->
+    <symbol id="doodle-ribbon" viewBox="0 0 80 50">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10,25 Q20,10 40,25 T70,25"/>
+        <path d="M10,30 Q20,15 40,30 T70,30"/>
+        <path d="M5,28 L10,25 L10,30 Z" fill="currentColor"/>
+        <path d="M75,28 L70,25 L70,30 Z" fill="currentColor"/>
+      </g>
+    </symbol>
+
+    <!-- Mini stars cluster -->
+    <symbol id="doodle-stars" viewBox="0 0 80 60">
+      <g fill="currentColor" stroke="currentColor" stroke-width="0.5">
+        <path d="M15,15 L17,20 L22,20 L18,23 L20,28 L15,25 L10,28 L12,23 L8,20 L13,20 Z"/>
+        <path d="M55,8 L56,12 L60,12 L57,14 L58,18 L55,16 L52,18 L53,14 L50,12 L54,12 Z" transform="scale(0.7) translate(20,5)"/>
+        <path d="M60,40 L62,44 L66,44 L63,46 L64,50 L60,48 L56,50 L57,46 L54,44 L58,44 Z" transform="scale(0.8)"/>
+        <circle cx="35" cy="30" r="1.5"/>
+        <circle cx="25" cy="45" r="1.5"/>
+        <circle cx="50" cy="25" r="1.5"/>
+      </g>
+    </symbol>
+
+    <!-- Section decoration -->
+    <symbol id="section-decor" viewBox="0 0 200 30">
+      <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+        <path d="M0,15 L70,15"/>
+        <path d="M130,15 L200,15"/>
+        <g transform="translate(100,15)">
+          <circle r="6"/>
+          <circle r="2" fill="currentColor"/>
+          <path d="M-15,0 L-9,0 M9,0 L15,0"/>
+          <circle cx="-15" cy="0" r="2" fill="currentColor"/>
+          <circle cx="15" cy="0" r="2" fill="currentColor"/>
+          <path d="M0,-12 L0,-6 M0,6 L0,12"/>
+          <circle cx="0" cy="-12" r="1.5" fill="currentColor"/>
+          <circle cx="0" cy="12" r="1.5" fill="currentColor"/>
+        </g>
+      </g>
+    </symbol>
+
+    <!-- Product divider (small) -->
+    <symbol id="product-divider" viewBox="0 0 60 10">
+      <g fill="currentColor" stroke="currentColor" stroke-width="0.8">
+        <path d="M0,5 L20,5" fill="none"/>
+        <path d="M40,5 L60,5" fill="none"/>
+        <path d="M30,5 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" fill="none"/>
+        <circle cx="30" cy="5" r="1"/>
+      </g>
+    </symbol>
+
+    <!-- Footer ornate divider -->
+    <symbol id="footer-divider" viewBox="0 0 240 24">
+      <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+        <path d="M0,12 L80,12"/>
+        <path d="M160,12 L240,12"/>
+        <g transform="translate(120,12)">
+          <path d="M-30,0 Q-25,-8 -20,0 Q-15,-8 -10,0"/>
+          <path d="M30,0 Q25,-8 20,0 Q15,-8 10,0"/>
+          <circle r="5"/>
+          <circle r="2" fill="currentColor"/>
+          <circle cx="-30" cy="0" r="1.5" fill="currentColor"/>
+          <circle cx="30" cy="0" r="1.5" fill="currentColor"/>
+        </g>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+
+<!-- ───── NAV ───── -->
+<nav>
+  <div class="nav-logo">Pariss</div>
+  <ul class="nav-links">
+    <li><a href="#collection">Collection</a></li>
+    <li><a href="#popup">Pop-up</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+
+<!-- ───── HERO ───── -->
+<section class="hero">
+  <svg class="lace-corner lace-corner-tl"><use href="#lace-corner"/></svg>
+  <svg class="lace-corner lace-corner-tr"><use href="#lace-corner"/></svg>
+  <svg class="lace-corner lace-corner-bl"><use href="#lace-corner"/></svg>
+  <svg class="lace-corner lace-corner-br"><use href="#lace-corner"/></svg>
+
+  <svg class="doodle hero-doodle-1" style="color: var(--rose-deep)"><use href="#doodle-bow"/></svg>
+  <svg class="doodle hero-doodle-2" style="color: var(--rose)"><use href="#doodle-flower"/></svg>
+  <svg class="doodle hero-doodle-3" style="color: var(--gold)"><use href="#doodle-stars"/></svg>
+  <svg class="doodle hero-doodle-4" style="color: var(--rose-deep)"><use href="#doodle-heart"/></svg>
+  <svg class="doodle hero-doodle-5" style="color: var(--rose)"><use href="#doodle-sparkle"/></svg>
+  <svg class="doodle hero-doodle-6" style="color: var(--gold)"><use href="#doodle-flower"/></svg>
+
+  <div class="hero-stamp">Est. MMXXIV — Maison de Pre-loved</div>
+  <h1 class="hero-title">Pariss</h1>
+  <p class="hero-subtitle">Curated · Authenticated · Adored</p>
+  <p class="hero-tagline">A little corner of <em>Parisian romance</em>,<br>where every treasure is given a second love story.</p>
+
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="hero-meta-num">21</span>
+      <span class="hero-meta-label">Pieces in store</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-num">100%</span>
+      <span class="hero-meta-label">Authenticated</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-num">01</span>
+      <span class="hero-meta-label">Pop-up · NYC</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ───── DIVIDER ───── -->
+<div class="divider-section">
+  <svg class="lace-line"><use href="#lace-line"/></svg>
+  <span class="divider-icon">✦ Bonjour, ma chérie ✦</span>
+  <svg class="lace-line"><use href="#lace-line"/></svg>
+</div>
+
+
+<!-- ───── COLLECTION ───── -->
+<section class="collection" id="collection">
+  <svg class="doodle collection-doodle-1" style="color: var(--rose)"><use href="#doodle-bow"/></svg>
+  <svg class="doodle collection-doodle-2" style="color: var(--gold)"><use href="#doodle-flower"/></svg>
+  <svg class="doodle collection-doodle-3" style="color: var(--rose-deep)"><use href="#doodle-heart"/></svg>
+  <svg class="doodle collection-doodle-4" style="color: var(--rose)"><use href="#doodle-sparkle"/></svg>
+
+  <div class="section-header reveal">
+    <div class="section-eyebrow">Spring · MMXXVI</div>
+    <h2 class="section-title">La Collection</h2>
+    <p class="section-subtitle">Twenty-one little loves, waiting for you</p>
+    <svg class="section-decor"><use href="#section-decor"/></svg>
+  </div>
+
+  <div class="products">
+    <!-- 21 PRODUCTS - replace gradients with real images -->
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-1">
+          <span class="product-tag">Mint</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 01</div>
+        <div class="product-name">Kelly 25 Sellier</div>
+        <div class="product-brand">Hermès · Étoupe Togo</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 12,800</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-2">
+          <span class="product-tag">Rare</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 02</div>
+        <div class="product-name">Classic Flap Medium</div>
+        <div class="product-brand">Chanel · Caviar Noir</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 8,400</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-3">
+          <span class="product-tag">New In</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 03</div>
+        <div class="product-name">Lady Dior Medium</div>
+        <div class="product-brand">Dior · Beige Cannage</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 4,200</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-4">
+          <span class="product-tag">Limited</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 04</div>
+        <div class="product-name">Birkin 30 Bordeaux</div>
+        <div class="product-brand">Hermès · Togo GHW</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 22,500</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-5">
+          <span class="product-tag">Vintage</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 05</div>
+        <div class="product-name">Capucines BB</div>
+        <div class="product-brand">Louis Vuitton · Galet</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 3,800</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-6">
+          <span class="product-tag">Iconic</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 06</div>
+        <div class="product-name">2.55 Reissue 226</div>
+        <div class="product-brand">Chanel · Aged Calfskin</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 7,200</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-7">
+          <span class="product-tag">New In</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 07</div>
+        <div class="product-name">Constance 18</div>
+        <div class="product-brand">Hermès · Gold Epsom</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 11,400</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-8">
+          <span class="product-tag">Mint</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 08</div>
+        <div class="product-name">Diana Mini</div>
+        <div class="product-brand">Gucci · Beige Web</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 2,700</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-9">
+          <span class="product-tag">Reserved</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 09</div>
+        <div class="product-name">Cassette Intrecciato</div>
+        <div class="product-brand">Bottega Veneta · Nero</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 3,300</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-10">
+          <span class="product-tag">Vintage</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 10</div>
+        <div class="product-name">Speedy 25</div>
+        <div class="product-brand">Louis Vuitton · Monogram</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 1,650</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-11">
+          <span class="product-tag">Rare</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 11</div>
+        <div class="product-name">Boy Bag Medium</div>
+        <div class="product-brand">Chanel · Bordeaux Lambskin</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 5,900</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-12">
+          <span class="product-tag">Vintage</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 12</div>
+        <div class="product-name">Saddle Bag</div>
+        <div class="product-brand">Dior · Tan Leather</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 3,950</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-13">
+          <span class="product-tag">Iconic</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 13</div>
+        <div class="product-name">Jackie 1961 Mini</div>
+        <div class="product-brand">Gucci · Rosso Ancora</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 2,400</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-14">
+          <span class="product-tag">New In</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 14</div>
+        <div class="product-name">Pochette Métis</div>
+        <div class="product-brand">Louis Vuitton · Reverse Mono</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 2,100</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-15">
+          <span class="product-tag">Mint</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 15</div>
+        <div class="product-name">Picotin Lock 18</div>
+        <div class="product-brand">Hermès · Craie Clémence</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 5,200</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-16">
+          <span class="product-tag">Limited</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 16</div>
+        <div class="product-name">Coco Handle Mini</div>
+        <div class="product-brand">Chanel · Rose Caviar</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 6,800</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-17">
+          <span class="product-tag">Rare</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 17</div>
+        <div class="product-name">Book Tote 26</div>
+        <div class="product-brand">Dior · Embroidered Khaki</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 4,650</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-18">
+          <span class="product-tag">New In</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 18</div>
+        <div class="product-name">Mini Pochette Accessoires</div>
+        <div class="product-brand">Louis Vuitton · Damier Azur</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 980</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-19">
+          <span class="product-tag">Iconic</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 19</div>
+        <div class="product-name">Wallet on Chain</div>
+        <div class="product-brand">Chanel · Navy Caviar</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 3,400</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-20">
+          <span class="product-tag">Vintage</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 20</div>
+        <div class="product-name">Evelyne III PM</div>
+        <div class="product-brand">Hermès · Vert Cyprès</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 4,800</div>
+      </div>
+    </div>
+
+    <div class="product reveal">
+      <div class="product-frame">
+        <div class="product-image bg-21">
+          <span class="product-tag">Adorable</span>
+          <span class="product-image-label">— Replace with photo</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-number">N° 21</div>
+        <div class="product-name">Twilly Silk Scarf Set</div>
+        <div class="product-brand">Hermès · Trio Rose</div>
+        <svg class="product-divider"><use href="#product-divider"/></svg>
+        <div class="product-price">$ 720</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ───── DIVIDER ───── -->
+<div class="divider-section">
+  <svg class="lace-line"><use href="#lace-line"/></svg>
+  <span class="divider-icon">✦ Rendez-vous ✦</span>
+  <svg class="lace-line"><use href="#lace-line"/></svg>
+</div>
+
+
+<!-- ───── POP-UP ───── -->
+<section class="popup" id="popup">
+  <svg class="doodle popup-doodle-1"><use href="#doodle-bow"/></svg>
+  <svg class="doodle popup-doodle-2"><use href="#doodle-flower"/></svg>
+  <svg class="doodle popup-doodle-3"><use href="#doodle-heart"/></svg>
+  <svg class="doodle popup-doodle-4"><use href="#doodle-sparkle"/></svg>
+
+  <div class="popup-inner">
+    <div class="popup-eyebrow reveal">Pop-up · MMXXVI</div>
+    <h2 class="popup-title reveal">Come Visit Us</h2>
+    <div class="popup-location reveal">The Mercer Atelier</div>
+    <div class="popup-city reveal">SoHo · New York City</div>
+
+    <div class="popup-details">
+      <div class="popup-detail reveal">
+        <div class="popup-detail-label">When</div>
+        <div class="popup-detail-value">June 12 — 16<span>2026</span></div>
+      </div>
+      <div class="popup-detail reveal">
+        <div class="popup-detail-label">Where</div>
+        <div class="popup-detail-value">147 Mercer Street<span>New York, NY 10012</span></div>
+      </div>
+      <div class="popup-detail reveal">
+        <div class="popup-detail-label">Hours</div>
+        <div class="popup-detail-value">11:00 — 19:00<span>By appointment after 7pm</span></div>
+      </div>
+    </div>
+
+    <a href="#contact" class="popup-cta reveal">Reserve a Visit</a>
+  </div>
+</section>
+
+
+<!-- ───── FOOTER ───── -->
+<footer id="contact">
+  <div class="footer-top">
+    <div class="footer-brand">Pariss</div>
+    <p class="footer-tagline">Pre-loved with tenderness, since MMXXIV</p>
+    <svg class="footer-divider"><use href="#footer-divider"/></svg>
+  </div>
+
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Find Us</h4>
+      <a href="#">Instagram · @pariss.maison</a>
+      <a href="#">TikTok · @pariss.nyc</a>
+      <a href="#">Pinterest · pariss</a>
+    </div>
+    <div class="footer-col">
+      <h4>Write to Us</h4>
+      <a href="mailto:bonjour@pariss.studio">bonjour@pariss.studio</a>
+      <p>+1 (212) 555 0142</p>
+    </div>
+    <div class="footer-col">
+      <h4>The Maison</h4>
+      <a href="#">Authentication</a>
+      <a href="#">Consignment</a>
+      <a href="#">About Pariss</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    © MMXXVI Pariss · A Maison of Pre-loved Treasures · Made with ♡
+  </div>
+</footer>
+
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('in'), Math.min(i * 50, 400));
+      io.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+reveals.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
